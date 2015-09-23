@@ -1,0 +1,9 @@
+[run]
+source = FGABrejaAPI/
+omit =
+    tests.py
+    __init__.py
+
+[report]
+precision = 2
+show_missing = True
