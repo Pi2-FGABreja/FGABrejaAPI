@@ -1,0 +1,90 @@
+sensor1:
+    type:
+        - 1
+        - themal
+    location:
+        - 1
+        - first_pot
+    position:
+        - 1
+        - lower
+sensor2:
+    type:
+        - 1
+        - themal
+    location:
+        - 1
+        - first_pot
+    position:
+        - 2
+        - medium
+sensor3:
+    type:
+        - 1
+        - themal
+    location:
+        - 1
+        - first_pot
+    position:
+        - 3
+        - high
+sensor4:
+    type:
+        - 1
+        - themal
+    location:
+        - 2
+        - second_pot
+    position:
+        - 1
+        - lower
+sensor5:
+    type:
+        - 1
+        - themal
+    location:
+        - 2
+        - second_pot
+    position:
+        - 2
+        - medium
+sensor6:
+    type:
+        - 1
+        - themal
+    location:
+        - 2
+        - second_pot
+    position:
+        - 3
+        - high
+sensor7:
+    type:
+        - 1
+        - themal
+    location:
+        - 2
+        - third_pot
+    position:
+        - 1
+        - lower
+sensor8:
+    type:
+        - 1
+        - themal
+    location:
+        - 2
+        - third_pot
+    position:
+        - 2
+        - medium
+sensor9:
+    type:
+        - 1
+        - themal
+    location:
+        - 2
+        - third_pot
+    position:
+        - 3
+        - high
