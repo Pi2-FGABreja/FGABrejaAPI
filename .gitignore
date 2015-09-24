@@ -43,6 +43,9 @@ nosetests.xml
 coverage.xml
 *,cover
 
+# PyCharm files
+.idea/
+
 # Translations
 *.mo
 *.pot
