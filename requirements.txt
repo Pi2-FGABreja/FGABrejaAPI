@@ -3,4 +3,4 @@ coverage==4.0
 flake8==2.4.1
 PyYAML==3.11
 pyserial==2.7
-coveralls==0.5
+coveralls==1.0
