@@ -20,5 +20,5 @@ $ python run.py
 ###Testing
 
 ```
-$ python run.py
+$ python test.py
 ```
