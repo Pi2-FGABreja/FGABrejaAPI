@@ -3,4 +3,4 @@ from flask import Flask
 
 app = Flask(__name__)
 
-from FGABrejaAPI import views, tests
+from FGABrejaAPI import views, tests, routes
