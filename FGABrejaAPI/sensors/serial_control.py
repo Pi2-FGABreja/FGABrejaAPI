@@ -2,17 +2,18 @@ import serial
 
 
 class SerialReader:
-    def __init__(self, parameters):
+    def __init__(self):
         self.ser = None
         try:
             self.ser = serial.Serial(port='/dev/ttyAMA0',
                                      baudrate=9600,
                                      parity=serial.PARITY_NONE,
                                      stopbits=serial.STOPBITS_ONE,
-                                     bytesize=serial.EIGHTBITS, timeout=1)
-        except:
+                                     bytesize=serial.EIGHTBITS,
+                                     timeout=1)
+        except serial.SerialException:
             self.ser = None
-            print 'Failed to connect to serial port'
+            print('Failed to connect to serial port')
 
     def read_serial(self):
         x = self.ser.readline().strip()
