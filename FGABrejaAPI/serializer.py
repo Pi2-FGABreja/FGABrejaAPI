@@ -20,5 +20,4 @@ class Serializer(object):
     def serialize_error(cls, error_code, error_message):
         error_dict = {}
         error_dict[error_code] = error_message
-        print(error_dict)
         return json.dumps(error_dict)

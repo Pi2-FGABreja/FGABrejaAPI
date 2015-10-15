@@ -30,12 +30,12 @@ class ThermalSensor(Sensor):
                                  'not exist.'.format(self.id))
 
     def load_initial_data(self):
-        sensors_dict = self.load_yaml(self.open_yaml())
+        sensors_dict = self.load_yaml()
         return sensors_dict.get('sensor{}'.format(self.id))
 
     @classmethod
-    def load_yaml(cls, yaml_file):
-        return yaml.load(yaml_file.read())
+    def load_yaml(cls):
+        return yaml.load(cls.open_yaml())
 
     @classmethod
     def open_yaml(cls):
@@ -44,7 +44,7 @@ class ThermalSensor(Sensor):
 
     @classmethod
     def all(cls):
-        sensors_dict = cls.load_yaml(cls.open_yaml())
+        sensors_dict = cls.load_yaml()
         sensors_list = []
 
         for sensor in sensors_dict:
