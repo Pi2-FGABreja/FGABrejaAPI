@@ -15,3 +15,21 @@ class SensorView(View):
 
         data = serializers.serialize("json", sensors)
         return HttpResponse(data, content_type='application/json')
+
+
+def get_thermal_sensors(request):
+    sensors = Sensor.read.thermal()
+    data = serializers.serialize("json", sensors)
+    return HttpResponse(data, content_type='application/json')
+
+
+def get_level_sensors(request):
+    sensors = Sensor.read.level()
+    data = serializers.serialize("json", sensors)
+    return HttpResponse(data, content_type='application/json')
+
+
+def get_ldr_sensors(request):
+    sensors = Sensor.read.ldr()
+    data = serializers.serialize("json", sensors)
+    return HttpResponse(data, content_type='application/json')
