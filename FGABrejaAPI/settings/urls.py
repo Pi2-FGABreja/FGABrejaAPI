@@ -1,8 +1,9 @@
-from django.conf.urls import include, url
-from django.contrib import admin
+from django.conf.urls import url
+from monitoring.views import SensorView
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^auth/', include('authentication.urls')),
-    url(r'^', include('monitoring.urls')),
+    url(r'^api/sensors/$', SensorView.as_view(),
+        name='sensors_all'),
+    url(r'^api/sensors/(?P<sensor_id>[0-9]+)$', SensorView.as_view(),
+        name='sensors_specific'),
 ]
