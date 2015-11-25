@@ -52,3 +52,19 @@ class Sensor(models.Model):
     def __str__(self):
         return "{} - {}, {}, {}".format(self.id, self.sensor_type,
                                         self.location, self.position)
+
+
+class ThermalSensor(object):
+
+    @classmethod
+    def get_current_temperature_in(cls, location):
+        sensors = Sensor.read.thermal()
+        sensors = sensors.filter(location=location)
+        return cls.calculate_temperature_average(sensors)
+
+    @classmethod
+    def calculate_temperature_average(cls, sensors):
+        temperature_sum = 0
+        for sensor in sensors:
+            temperature_sum += sensor.value
+        return temperature_sum / sensors.count()
