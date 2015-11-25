@@ -2,6 +2,7 @@ from django.views.generic import View
 from django.http import HttpResponse
 from .models import Sensor
 from django.core import serializers
+import json
 
 
 class SensorView(View):
@@ -21,6 +22,18 @@ def get_thermal_sensors(request):
     sensors = Sensor.read.thermal()
     data = serializers.serialize("json", sensors)
     return HttpResponse(data, content_type='application/json')
+
+
+def get_average_temperature(request):
+    sensors = Sensor.read.thermal()
+    average = 0
+    for sensor in sensors:
+        average += sensor.value
+    average = average / sensors.count()
+    data = {'average': round(average, 2),
+            'sensor_type': 'thermal'}
+    return HttpResponse(json.dumps(data),
+                        content_type='application/json')
 
 
 def get_level_sensors(request):
