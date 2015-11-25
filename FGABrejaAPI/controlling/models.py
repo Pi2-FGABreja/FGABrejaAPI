@@ -22,3 +22,4 @@ class Process(models.Model):
     recipe = models.ForeignKey('Recipe')
     iodine_test = models.BooleanField(default=False)
     malt = models.BooleanField(default=False)
+    state = models.IntegerField()
