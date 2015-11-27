@@ -48,6 +48,8 @@ class Process(models.Model):
     level_pot2 = models.BooleanField(default=False)
     actual_heat = models.ForeignKey('Heat')
     actual_heat_time = models.DateTimeField(null=True)
+    level_po1 = models.BooleanField(default=False)
+    level_pot2 = models.BooleanField(default=False)
 
     def change_heat(self):
         delta = datetime.datetime.now() - self.actual_heat_time
