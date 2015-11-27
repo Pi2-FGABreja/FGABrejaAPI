@@ -1,4 +1,5 @@
 from django.db import models
+from distutils.util import strtobool
 import random
 
 
@@ -46,7 +47,7 @@ class Sensor(models.Model):
         if self.sensor_type == "ldr":
             self.value = random.randint(0, 100)
         if self.sensor_type == "level":
-            self.value = random.random() * 10
+            self.value = random.choice([True, False])
         self.save()
 
     def __str__(self):
@@ -68,3 +69,12 @@ class ThermalSensor(object):
         for sensor in sensors:
             temperature_sum += sensor.value
         return temperature_sum / sensors.count()
+
+
+class LevelSensor(object):
+
+    @classmethod
+    def get_current_water_level_in(cls, location):
+        sensors = Sensor.read.level()
+        sensors = sensors.get(location=location)
+        return bool(strtobool(sensors.value))
