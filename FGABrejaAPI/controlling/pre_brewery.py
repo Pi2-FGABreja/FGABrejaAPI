@@ -5,13 +5,13 @@ STATES = {'check_level': 1,
           }
 
 
-class BreweryControll(object):
+class PreBreweryControll(object):
 
     def __init__(self, process):
         self.process = process
 
     def check_level(self):
-        level = LevelSensor.get_current_level_in('panela1')
+        level = LevelSensor.get_current_water_level_in('panela1')
         if level:
             self.process.state = STATES.get('notify_user')
             self.process.save()
