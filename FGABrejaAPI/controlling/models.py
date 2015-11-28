@@ -1,7 +1,8 @@
-from django.db import models
-from django.utils import timezone
 from datetime import timedelta
 import json
+
+from django.db import models
+from django.utils import timezone
 
 
 class Heat(models.Model):
@@ -20,9 +21,13 @@ class Valve(models.Model):
 
 
 class Recipe(models.Model):
-
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=250)
+    malt = models.CharField(max_length=250)
+    malt_weight = models.FloatField()
     hops_order = models.CharField(max_length=255, blank=True)
     heat_order = models.CharField(max_length=255, blank=True)
+    yeast = models.CharField(max_length=50)
 
     def set_hop_order(self, order):
         hop_order = {}

@@ -35,7 +35,6 @@ class Sensor(models.Model):
 
     sensor_type = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
-    position = models.CharField(max_length=50)
     value = models.CharField(max_length=50, default=0)
 
     objects = models.Manager()
