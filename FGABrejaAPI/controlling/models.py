@@ -14,6 +14,10 @@ class Hop(models.Model):
     weight = models.FloatField()
 
 
+class Valve(models.Model):
+    is_open = models.BooleanField(default=False)
+
+
 class Recipe(models.Model):
     hops_order = models.CharField(max_length=255)
     heat_order = models.CharField(max_length=255)
@@ -46,9 +50,9 @@ class Process(models.Model):
     state = models.IntegerField()
     level_pot1 = models.BooleanField(default=False)
     level_pot2 = models.BooleanField(default=False)
-    actual_heat = models.ForeignKey('Heat')
+    actual_heat = models.ForeignKey('Heat', null=True)
     actual_heat_time = models.DateTimeField(null=True)
-    level_po1 = models.BooleanField(default=False)
+    level_pot1 = models.BooleanField(default=False)
     level_pot2 = models.BooleanField(default=False)
 
     def change_heat(self):
