@@ -1,5 +1,6 @@
 from django.db import models
-import datetime
+from django.utils import timezone
+from datetime import timedelta
 import json
 
 
@@ -19,8 +20,9 @@ class Valve(models.Model):
 
 
 class Recipe(models.Model):
-    hops_order = models.CharField(max_length=255)
-    heat_order = models.CharField(max_length=255)
+
+    hops_order = models.CharField(max_length=255, blank=True)
+    heat_order = models.CharField(max_length=255, blank=True)
 
     def set_hop_order(self, order):
         hop_order = {}
@@ -52,15 +54,16 @@ class Process(models.Model):
     level_pot2 = models.BooleanField(default=False)
     actual_heat = models.ForeignKey('Heat', null=True)
     actual_heat_time = models.DateTimeField(null=True)
-    level_pot1 = models.BooleanField(default=False)
-    level_pot2 = models.BooleanField(default=False)
+    next_heat = models.IntegerField(default=2)
 
     def change_heat(self):
-        delta = datetime.datetime.now() - self.actual_heat_time
-        if delta >= datetime.timedelta(minutes=self.actual_heat.duration):
+        now = timezone.now()
+        print(now)
+        print(self.actual_heat_time)
+        delta = now - self.actual_heat_time
+        if delta >= timedelta(minutes=self.actual_heat.duration):
             return True
         elif self.actual_heat_time is None:
             return True
         else:
             return False
-
