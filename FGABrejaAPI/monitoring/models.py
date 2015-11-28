@@ -42,7 +42,7 @@ class Sensor(models.Model):
 
     def read_sensor(self):
         if self.sensor_type == "thermal":
-            self.value = random.random() * 100
+            self.value = 81.0
         if self.sensor_type == "ldr":
             self.value = random.randint(0, 100)
         if self.sensor_type == "level":
@@ -66,5 +66,5 @@ class ThermalSensor(object):
     def calculate_temperature_average(cls, sensors):
         temperature_sum = 0
         for sensor in sensors:
-            temperature_sum += sensor.value
+            temperature_sum += float(sensor.value)
         return temperature_sum / sensors.count()
