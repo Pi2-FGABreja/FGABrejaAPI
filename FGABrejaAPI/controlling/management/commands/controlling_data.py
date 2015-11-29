@@ -28,6 +28,7 @@ class Command(BaseCommand):
         recipe.description = "5.84% teor de álcool"
         recipe.malt = "75% Pilsen, 10% Malte de trigo, 10% CaraAmber, "
         "5% CaraAroma"
+        recipe.boiling_temperature = 65.0
         recipe.malt_weight = 5.0
         recipe.set_hop_order(hops)
         recipe.set_heat_order(heats)

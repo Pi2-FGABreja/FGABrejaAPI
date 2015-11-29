@@ -23,6 +23,7 @@ class Valve(models.Model):
 class Recipe(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
+    boiling_temperature = models.FloatField()
     malt = models.CharField(max_length=250)
     malt_weight = models.FloatField()
     hops_order = models.CharField(max_length=255, blank=True)
@@ -63,8 +64,6 @@ class Process(models.Model):
 
     def change_heat(self):
         now = timezone.now()
-        print(now)
-        print(self.actual_heat_time)
         delta = now - self.actual_heat_time
         if delta >= timedelta(minutes=self.actual_heat.duration):
             return True

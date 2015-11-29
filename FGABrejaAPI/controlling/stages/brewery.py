@@ -1,6 +1,9 @@
 from monitoring.models import ThermalSensor
 from controlling.models import Heat
 from django.utils import timezone
+import logging
+
+logger = logging.getLogger('fga-breja')
 
 
 STATES = {'initial_boiling': 1,
@@ -22,62 +25,59 @@ class BreweryControll(object):
     def define_step(self):
         state = self.process.state
         if state == STATES.get('initial_boiling'):
-            print("Step defined: initial_boiling")
+            logger.info("[Brewery] Function defined: initial_boiling")
             self.initial_boiling()
         elif state == STATES.get('heating'):
-            print("Step defined: heating")
+            logger.info("[Brewery] Function defined: heating")
             self.heating()
         elif state == STATES.get('heat_controll'):
-            print("Step defined: heat_controll")
+            logger.info("[Brewery] Function defined: heat_controll")
             self.heat_controll()
 
     def initial_boiling(self):
-        print("Initial Boiling")
+        boiling_temperature = self.process.recipe.boiling_temperature
         temperature = ThermalSensor.get_current_temperature_in('panela1')
-        if temperature < 65:
-            print("Temperature less than 65 degrees")
+        if temperature < boiling_temperature:
+            logger.info("[Brewery] Actual temperature is lower "
+                        "than %.2f" % boiling_temperature)
             # Increase heat
             pass
         else:
-            print("Temperature greater than 65 degrees")
+            logger.info("[Brewery] Actual temperature is greater "
+                        "than %.2f" % boiling_temperature)
             # Maintain temperature
             self.process.state = STATES.get('insert_malt')
-            print("Change state: insert_malt")
+            logger.info("[Brewery] State changed! New state: insert_malt")
         self.process.save()
 
     def heating(self):
-        print("Heating")
         temperature = ThermalSensor.get_current_temperature_in('panela1')
         if temperature < self.process.actual_heat.temperature:
-            print("Temperature less than actual_heat temperature")
+            logger.info("[Brewery] Temperature less than actual "
+                        "heat temperature")
             # Increase temperature
             pass
         else:
-            print("Temperature greater than actual_heat temperature")
+            logger.info("[Brewery] Temperature greater than "
+                        "actual_heat temperature")
             self.process.actual_heat_time = timezone.now()
             self.process.state = STATES.get('heat_controll')
-            print("Change state: heat_controll")
+            logger.info("[Brewery] State changed! New state: heat_controll")
         self.process.save()
 
     def heat_controll(self):
-        print('Heat controll')
         if self.process.change_heat():
-            print('Change heat')
+            logger.info('[Brewery] Previous heating is done. Change heat!')
             if self.check_next():
-                print("Next exists")
-                print(self.get_next_heat())
                 heat = Heat.objects.get(pk=self.get_next_heat())
                 self.process.next_heat += 1
                 self.process.actual_heat = heat
                 self.process.state = STATES.get('heating')
-                print("Change state: heating")
+                logger.info("[Brewery] State changed! New state: heating")
             else:
-                print("Without next")
                 self.process.state = STATES.get('iodine_test')
-                print("Change state: iodine_test")
+                logger.info("[Brewery] State changed! New state: iodine_test")
         else:
-            print('Maintain temperature')
-
             # Maintain temperature
             pass
         self.process.save()
