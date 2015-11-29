@@ -1,6 +1,6 @@
 from monitoring.models import LevelSensor
 from controlling.models import Valve
-from controlling import brewery
+from controlling.stages import brewery
 
 STATES = {'insert_water': 1,
           'check_level': 2,
