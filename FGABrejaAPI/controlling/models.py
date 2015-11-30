@@ -56,11 +56,15 @@ class Process(models.Model):
     iodine_test = models.BooleanField(default=False)
     malt = models.BooleanField(default=False)
     state = models.IntegerField()
+
     level_pot1 = models.BooleanField(default=False)
     level_pot2 = models.BooleanField(default=False)
+
     actual_heat = models.ForeignKey('Heat', null=True)
     actual_heat_time = models.DateTimeField(null=True)
     next_heat = models.IntegerField(default=2)
+
+    filtering_init = models.DateTimeField(null=True)
 
     def change_heat(self):
         now = timezone.now()
