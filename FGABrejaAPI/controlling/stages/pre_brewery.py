@@ -17,8 +17,19 @@ class PreBreweryControll(object):
         self.process = process
         self.valve = Valve.objects.get(pk=1)
 
+    def handle_states(self):
+        state = self.process.state
+        if state == STATES.get('insert_water'):
+            logger.info("[PreBrewery] Opening valve")
+            self.isert_water()
+        elif state == STATES.get('check_level'):
+            logger.info("[PreBrewery] Checking level of pot1. . .")
+            self.check_level()
+        elif state == STATES.get('stop_water'):
+            logger.info("[PreBrewery] Closing water valve")
+            self.stop_water()
+
     def insert_water(self):
-        logger.info("[PreBrewery] Opening valve")
         self.valve = Valve.objects.get(pk=1)
         self.valve.is_opened = 1
         self.process.state = STATES.get('check_level')
@@ -26,9 +37,7 @@ class PreBreweryControll(object):
         logger.info("[PreBrewery] State changed! New state: check_level")
 
     def check_level(self):
-        logger.info("[PreBrewery] Checking level of pot1. . .")
         level = LevelSensor.get_current_water_level_in('panela1')
-
         if level:
             logger.info("[PreBrewery] Pot water level reached")
             self.process.state = STATES.get('stop_water')
@@ -40,7 +49,6 @@ class PreBreweryControll(object):
             self.process.save()
 
     def stop_water(self):
-        logger.info("[PreBrewery] Closing water valve")
         self.valve.is_opened = 0
         self.process.state = brewery.STATES.get('initial_boiling')
         self.process.save()
