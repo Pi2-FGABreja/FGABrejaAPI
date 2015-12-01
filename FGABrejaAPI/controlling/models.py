@@ -23,7 +23,9 @@ class Valve(models.Model):
 class Recipe(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
-    boiling_temperature = models.FloatField()
+    initial_boiling_temperature = models.FloatField()
+    boiling_temperature = models.FloatField(default=90)
+    fermentation_temperature = models.FloatField(default=10)
     malt = models.CharField(max_length=250)
     malt_weight = models.FloatField()
     hops_order = models.CharField(max_length=255, blank=True)
@@ -56,11 +58,19 @@ class Process(models.Model):
     iodine_test = models.BooleanField(default=False)
     malt = models.BooleanField(default=False)
     state = models.IntegerField()
+
     level_pot1 = models.BooleanField(default=False)
     level_pot2 = models.BooleanField(default=False)
+
     actual_heat = models.ForeignKey('Heat', null=True)
     actual_heat_time = models.DateTimeField(null=True)
     next_heat = models.IntegerField(default=2)
+
+    actual_hop = models.ForeignKey('Hop', null=True)
+    actual_hop_time = models.DateTimeField(null=True)
+    next_hop = models.IntegerField(default=2)
+
+    filtering_init = models.DateTimeField(null=True)
 
     def change_heat(self):
         now = timezone.now()
@@ -68,6 +78,16 @@ class Process(models.Model):
         if delta >= timedelta(minutes=self.actual_heat.duration):
             return True
         elif self.actual_heat_time is None:
+            return True
+        else:
+            return False
+
+    def change_hop(self):
+        now = timezone.now()
+        delta = now - self.actual_hop_time
+        if delta >= timedelta(minutes=self.actual_hop.minutes):
+            return True
+        elif self.actual_hop_time is None:
             return True
         else:
             return False

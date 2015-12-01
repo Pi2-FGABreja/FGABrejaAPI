@@ -35,7 +35,7 @@ class BreweryControll(object):
             self.heat_controll()
 
     def initial_boiling(self):
-        boiling_temperature = self.process.recipe.boiling_temperature
+        boiling_temperature = self.process.recipe.initial_boiling_temperature
         temperature = ThermalSensor.get_current_temperature_in('panela1')
         if temperature < boiling_temperature:
             logger.info("[Brewery] Actual temperature is lower "
