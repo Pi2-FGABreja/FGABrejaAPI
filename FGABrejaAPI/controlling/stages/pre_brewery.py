@@ -20,13 +20,13 @@ class PreBreweryControll(object):
     def handle_states(self):
         state = self.process.state
         if state == STATES.get('insert_water'):
-            logger.info("[PreBrewery] Opening valve")
+            logger.info("[PreBrewery] Function defined: insert_water")
             self.isert_water()
         elif state == STATES.get('check_level'):
-            logger.info("[PreBrewery] Checking level of pot1. . .")
+            logger.info("[PreBrewery] Function defined: check_level")
             self.check_level()
         elif state == STATES.get('stop_water'):
-            logger.info("[PreBrewery] Closing water valve")
+            logger.info("[PreBrewery] Function defined: stop_water")
             self.stop_water()
 
     def insert_water(self):

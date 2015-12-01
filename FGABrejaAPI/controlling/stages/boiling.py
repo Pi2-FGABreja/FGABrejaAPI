@@ -27,14 +27,15 @@ class BoilingControll(object):
     def handle_states(self):
         state = self.process.state
         if state == STATES.get('warm_must'):
-            logger.info("[Boiling] Warming must. . .")
-            self.process.actual_heat.temperature = 90
+            logger.info("[Boiling] Function defined: warm_must")
+            self.process.actual_heat.temperature = \
+                self.process.boiling_temperature
             self.warm_must()
         elif state == STATES.get('add_hops'):
-            logger.info("[Boiling] Adding hops to pot2. . .")
+            logger.info("[Boiling] Function defined: add_hops")
             self.add_hops()
         elif state == STATES.get('continue_boiling'):
-            logger.info("[Boiling] Adding hops to pot2. . .")
+            logger.info("[Boiling] Function defined: continue_boiling")
             self.continue_boiling()
 
     def warm_must(self):
@@ -42,6 +43,7 @@ class BoilingControll(object):
         if temperature < self.process.actual_heat.temperature:
             logger.info("[Boiling] Temperature less than actual "
                         "heat temperature")
+            self.process.state = STATES.get('warm_must')
             # Increase temperature
             pass
         else:
