@@ -58,6 +58,7 @@ class Process(models.Model):
     iodine_test = models.BooleanField(default=False)
     malt = models.BooleanField(default=False)
     state = models.IntegerField()
+    is_active = models.BooleanField(default=True)
 
     level_pot1 = models.BooleanField(default=False)
     level_pot2 = models.BooleanField(default=False)

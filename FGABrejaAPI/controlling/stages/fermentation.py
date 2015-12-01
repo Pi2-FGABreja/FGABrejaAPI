@@ -4,11 +4,10 @@ import logging
 
 logger = logging.getLogger('fga-breja')
 
-STATES = {'chill_must': 1,
-          'maintain_temperature': 2,
-          'verify_airlock': 3,
-          'process_end': 4
-          }
+STATES = {'chill_must': 18,
+          'maintain_temperature': 19,
+          'verify_airlock': 20,
+          'process_end': 21}
 
 
 class FermentationControll(object):
