@@ -24,7 +24,8 @@ class Recipe(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
     initial_boiling_temperature = models.FloatField()
-    boiling_temperature = models.FloatField(default=90)
+    boiling_temperature = models.FloatField()
+    boiling_duration = models.IntegerField()
     fermentation_temperature = models.FloatField(default=10)
     malt = models.CharField(max_length=250)
     malt_weight = models.FloatField()
@@ -67,9 +68,9 @@ class Process(models.Model):
     next_heat = models.IntegerField(default=2)
 
     actual_hop = models.ForeignKey('Hop', null=True)
-    actual_hop_time = models.DateTimeField(null=True)
     next_hop = models.IntegerField(default=2)
 
+    boiling_stop_time = models.DateTimeField(null=True)
     filtering_init = models.DateTimeField(null=True)
 
     def change_heat(self):
@@ -84,10 +85,10 @@ class Process(models.Model):
 
     def change_hop(self):
         now = timezone.now()
-        delta = now - self.actual_hop_time
-        if delta >= timedelta(minutes=self.actual_hop.minutes):
+        delta = self.boiling_stop_time - now
+        if delta <= timedelta(minutes=self.actual_hop.minutes):
             return True
-        elif self.actual_hop_time is None:
-            return True
+        elif self.boiling_stop_time is None:
+            return False
         else:
             return False
