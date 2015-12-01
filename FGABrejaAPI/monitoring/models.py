@@ -42,9 +42,9 @@ class Sensor(models.Model):
 
     def read_sensor(self):
         if self.sensor_type == "thermal":
-            self.value = random.randint(81, 100)
+            self.value = random.randint(5, 20)
         if self.sensor_type == "ldr":
-            self.value = random.randint(0, 100)
+            self.value = random.choice([True, False])
         if self.sensor_type == "level":
             self.value = random.choice([True, False])
         self.save()
@@ -75,5 +75,14 @@ class LevelSensor(object):
     @classmethod
     def get_current_water_level_in(cls, location):
         sensors = Sensor.read.level()
+        sensors = sensors.get(location=location)
+        return bool(strtobool(sensors.value))
+
+
+class LdrSensor(object):
+
+    @classmethod
+    def get_read_from_airlock(cls, location):
+        sensors = Sensor.read.ldr()
         sensors = sensors.get(location=location)
         return bool(strtobool(sensors.value))

@@ -1,15 +1,17 @@
 from monitoring.models import ThermalSensor
+from monitoring.models import LdrSensor
 import logging
 
 logger = logging.getLogger('fga-breja')
 
 STATES = {'chill_must': 1,
           'maintain_temperature': 2,
-          'verify_airlock': 3
+          'verify_airlock': 3,
+          'process_end': 4
           }
 
 
-class FermentationsControll(object):
+class FermentationControll(object):
 
     def __init__(self, process):
         self.process = process
@@ -19,11 +21,14 @@ class FermentationsControll(object):
         state = self.process.state
         if state == STATES.get('chill_must'):
             logger.info("[Fermentation] Function defined: chill_must")
-            self.turn_on_chiller()
+            self.chill_must()
         elif state == STATES.get('maintain_temperature'):
             logger.info("[Fermentation] Function defined: "
                         "maintain_temperature")
             self.maintain_temperature()
+        elif state == STATES.get('verify_airlock'):
+            logger.info("[Fermentation] Function defined: verify_airlock")
+            self.verify_airlock()
 
     def chill_must(self):
         logger.info('[Fermentation] Cooling must on the freezer')
@@ -54,5 +59,15 @@ class FermentationsControll(object):
             pass
         self.process.save()
 
-    #def verify_airlock(self):
-
+    def verify_airlock(self):
+        has_boubles = LdrSensor.get_read_from_airlock('pot3')
+        if has_boubles:
+            logger.info("[Fermentation] No more boubles, "
+                        "fermentation is done!")
+            self.process.state = STATES.get("process_end")
+        else:
+            logger.info("[Fermentation] Airlock has boubles "
+                        "fermentation still in process")
+            self.process.state = STATES.get('maintain_temperature')
+            pass
+        self.process.save()
