@@ -22,7 +22,7 @@ class BreweryControll(object):
         self.process = process
         self.next_heat = '2'
 
-    def define_step(self):
+    def handle_states(self):
         state = self.process.state
         if state == STATES.get('initial_boiling'):
             logger.info("[Brewery] Function defined: initial_boiling")

@@ -31,6 +31,7 @@ class CoolingControll(object):
         temperature = ThermalSensor.get_current_temperature_in('pot2')
         if temperature < 20.0:
             logger.info("[Cooling] Temperature is lower than 20 degrees")
+            logger.info("[Cooling] Turning off water on chiller")
             self.process.state = STATES.get('check_temperature')
             self.process.save()
             logger.info("[Cooling] State changed! New state: ---")
