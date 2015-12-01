@@ -3,8 +3,8 @@ import logging
 
 logger = logging.getLogger('fga-breja')
 
-STATES = {'turn_on_chiller': 1,
-          'check_temperature': 2}
+STATES = {'turn_on_chiller': 16,
+          'check_temperature': 17}
 
 
 class CoolingControll(object):

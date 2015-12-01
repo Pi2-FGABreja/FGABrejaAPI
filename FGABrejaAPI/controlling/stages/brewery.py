@@ -6,11 +6,11 @@ import logging
 logger = logging.getLogger('fga-breja')
 
 
-STATES = {'initial_boiling': 1,
-          'insert_malt': 2,
-          'heating': 3,
-          'heat_controll': 4,
-          'iodine_test': 5}
+STATES = {'initial_boiling': 4,
+          'insert_malt': 5,
+          'heating': 6,
+          'heat_controll': 7,
+          'iodine_test': 8}
 
 
 class BreweryControll(object):
@@ -36,7 +36,7 @@ class BreweryControll(object):
 
     def initial_boiling(self):
         boiling_temperature = self.process.recipe.initial_boiling_temperature
-        temperature = ThermalSensor.get_current_temperature_in('panela1')
+        temperature = ThermalSensor.get_current_temperature_in('pot1')
         if temperature < boiling_temperature:
             logger.info("[Brewery] Actual temperature is lower "
                         "than %.2f" % boiling_temperature)
@@ -51,7 +51,7 @@ class BreweryControll(object):
         self.process.save()
 
     def heating(self):
-        temperature = ThermalSensor.get_current_temperature_in('panela1')
+        temperature = ThermalSensor.get_current_temperature_in('pot1')
         if temperature < self.process.actual_heat.temperature:
             logger.info("[Brewery] Temperature less than actual "
                         "heat temperature")

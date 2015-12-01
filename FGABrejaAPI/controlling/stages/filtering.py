@@ -1,14 +1,15 @@
 from monitoring.models import LevelSensor
+from controlling.stages import boiling
 from django.utils import timezone
 from datetime import timedelta
 import logging
 
 logger = logging.getLogger('fga-breja')
 
-STATES = {'open_pot_valve': 1,
-          'insert_water': 2,
-          'check_level': 3,
-          'stop_water': 4}
+STATES = {'open_pot_valve': 9,
+          'insert_water': 10,
+          'check_level': 11,
+          'stop_water': 12}
 
 
 class FilteringControll(object):
@@ -60,4 +61,7 @@ class FilteringControll(object):
 
     def stop_water(self):
         logger.info("[Filtering] Closing valve")
-        logger.info("[Filtering] State changed! New state: ---")
+        self.process.state = boiling.STATES.get('warm_must')
+        self.process.save()
+        logger.info("[Filtering] State changed! New state: warm_must "
+                    "(from boiling process)")

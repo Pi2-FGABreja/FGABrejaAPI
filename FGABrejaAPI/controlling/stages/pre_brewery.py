@@ -7,8 +7,7 @@ logger = logging.getLogger('fga-breja')
 
 STATES = {'insert_water': 1,
           'check_level': 2,
-          'stop_water': 3
-          }
+          'stop_water': 3}
 
 
 class PreBreweryControll(object):
@@ -21,7 +20,7 @@ class PreBreweryControll(object):
         state = self.process.state
         if state == STATES.get('insert_water'):
             logger.info("[PreBrewery] Function defined: insert_water")
-            self.isert_water()
+            self.insert_water()
         elif state == STATES.get('check_level'):
             logger.info("[PreBrewery] Function defined: check_level")
             self.check_level()
@@ -37,7 +36,7 @@ class PreBreweryControll(object):
         logger.info("[PreBrewery] State changed! New state: check_level")
 
     def check_level(self):
-        level = LevelSensor.get_current_water_level_in('panela1')
+        level = LevelSensor.get_current_water_level_in('pot1')
         if level:
             logger.info("[PreBrewery] Pot water level reached")
             self.process.state = STATES.get('stop_water')

@@ -8,10 +8,9 @@ import logging
 
 logger = logging.getLogger('fga-breja')
 
-STATES = {'warm_must': 1,
-          'add_hops': 2,
-          'continue_boiling': 3
-          }
+STATES = {'warm_must': 13,
+          'add_hops': 14,
+          'continue_boiling': 15}
 
 
 class BoilingControll(object):
