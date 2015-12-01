@@ -29,7 +29,7 @@ class BoilingControll(object):
         if state == STATES.get('warm_must'):
             logger.info("[Boiling] Function defined: warm_must")
             self.process.actual_heat.temperature = \
-                self.process.boiling_temperature
+                self.process.recipe.boiling_temperature
             self.warm_must()
         elif state == STATES.get('add_hops'):
             logger.info("[Boiling] Function defined: add_hops")
@@ -39,7 +39,7 @@ class BoilingControll(object):
             self.continue_boiling()
 
     def warm_must(self):
-        temperature = ThermalSensor.get_current_temperature_in('panela2')
+        temperature = ThermalSensor.get_current_temperature_in('pot2')
         if temperature < self.process.actual_heat.temperature:
             logger.info("[Boiling] Temperature less than actual "
                         "heat temperature")
@@ -51,6 +51,8 @@ class BoilingControll(object):
             self.process.actual_hop_time = timezone.now()
             self.process.actual_heat_time = timezone.now()
             self.process.state = STATES.get('add_hops')
+            self.process.boiling_stop_time = timezone.now() + \
+                timedelta(minutes=self.process.recipe.boiling_duration)
             logger.info("[Boining] State changed! New state: add_hops")
         self.process.save()
 
@@ -61,7 +63,6 @@ class BoilingControll(object):
                 hops = Hop.objects.get(pk=self.get_next_hop())
                 self.process.next_hop += 1
                 self.process.actual_hop = hops
-                self.process.actual_hop_time = timezone.now()
                 self.process.state = STATES.get('add_hops')
                 logger.info("[Boiling] State changed! New state: add_hops")
             else:
@@ -75,7 +76,7 @@ class BoilingControll(object):
 
     def continue_boiling(self):
         if self.check_boiling_time_reached():
-            logger.info("[Boiling] Boiling stage complited!"
+            logger.info("[Boiling] Boiling stage completed!"
                         "New state: turn_on_chiller")
             self.process.state = cooling.STATES.get('turn_on_chiller')
 
@@ -91,9 +92,8 @@ class BoilingControll(object):
 
     def check_boiling_time_reached(self):
         now = timezone.now()
-        delta = now - self.process.actual_heat_time
 
-        if delta == timedelta(minutes=70):
+        if now >= self.process.boiling_stop_time:
             return True
         else:
             return False

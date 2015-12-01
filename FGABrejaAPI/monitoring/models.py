@@ -42,7 +42,7 @@ class Sensor(models.Model):
 
     def read_sensor(self):
         if self.sensor_type == "thermal":
-            self.value = random.randint(5, 20)
+            self.value = random.randint(20, 100)
         if self.sensor_type == "ldr":
             self.value = random.choice([True, False])
         if self.sensor_type == "level":
