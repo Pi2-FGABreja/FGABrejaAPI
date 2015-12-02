@@ -46,6 +46,11 @@ class Comunication(object):
     def turn_off_chiller(self):
         self.comunication_serial.write("turn_off_chiller")
 
+    # Fermentation Stage Serial Comunication
+    def turn_on_freezer(self, temperature):
+        self.comunication_serial.write("turn_on_freezer , %.2f" % temperature)
+
+    # Common Stages Serial Comunication
     def activate_alarm(self):
         self.comunication_serial.write("activate_alarm")
 
