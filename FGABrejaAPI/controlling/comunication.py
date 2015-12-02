@@ -27,16 +27,30 @@ class Comunication(object):
 
     def turn_on_resistor(self, pot, temperature=None):
         if temperature is not None:
-            self.comunication_serial.write("turn_on_resistor_pot1 , "
+            self.comunication_serial.write("turn_on_resistor , %s" % pot %
                                            "%.2f" % temperature)
         else:
-            self.comunication_serial.write("turn_on_resistor_pot2")
+            self.comunication_serial.write("turn_on_resistor , %s" % pot)
+
+    # Boiling Stage Serial Comunication
+    def add_hop(self, engine_id):
+        self.comunication_serial.write("add_hop , %d" % engine_id)
+
+    def turn_off_resistor(self, pot):
+        self.comunication_serial.write("turn_off_resistor , %s" % pot)
+
+    # Cooling Stage Serial Comunication
+    def turn_on_chiller(self):
+        self.comunication_serial.write("turn_on_chiller")
+
+    def turn_off_chiller(self):
+        self.comunication_serial.write("turn_off_chiller")
 
     def activate_alarm(self):
         self.comunication_serial.write("activate_alarm")
 
     def read_thermal_sensor(self, location):
-        self.comunication_serial.write("read_thermal_sensor %s" % location)
+        self.comunication_serial.write("read_thermal_sensor , %s" % location)
         temperature = self.comunication_serial.readline()
         return temperature
 
