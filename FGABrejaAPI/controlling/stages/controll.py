@@ -1,6 +1,7 @@
 from controlling.stages import (pre_brewery, brewery, filtering,
                                 boiling, cooling, fermentation)
 from controlling.models import Process
+from django.core.exceptions import ObjectDoesNotExist
 import logging
 
 logger = logging.getLogger('fga-breja')
@@ -10,7 +11,12 @@ class StageControll(object):
 
     @classmethod
     def handle_states(cls):
-        process = Process.objects.get(is_active=True)
+        try:
+            process = Process.objects.get(is_active=True)
+        except ObjectDoesNotExist:
+            logger.info("[StageControll] Any process started.")
+            return
+
         if process.state in pre_brewery.STATES.values():
             controll = pre_brewery.PreBreweryControll(process)
             controll.handle_states()

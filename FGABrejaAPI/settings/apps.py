@@ -20,7 +20,9 @@ DJANGO_APPS = (
     'django.contrib.staticfiles'
 )
 
-DJANGO_PLUGINS = ()
+DJANGO_PLUGINS = (
+    'djcelery',
+)
 
 FGABREJA_APPS = (
     'monitoring',
