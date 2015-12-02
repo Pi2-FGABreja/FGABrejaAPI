@@ -1,4 +1,5 @@
 from settings import databases, security, static, apps
+from celery.schedules import crontab
 from os import path
 BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 
@@ -29,6 +30,22 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+# CELERY STUFF
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Sao_Paulo'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+# CELERYBEAT_SCHEDULE_FILENAME = "celery-beat.schedule"
+CELERYBEAT_SCHEDULE = {
+    'add-every-60-seconds': {
+        'task': 'controll_process',
+        'schedule': crontab(),
+    },
+}
 
 # Logging
 LOGGING = {
