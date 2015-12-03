@@ -25,19 +25,20 @@ class Comunication(object):
         engine_state = self.comunication_serial.readline()
         return engine_state
 
-    def turn_on_resistor(self, pot, temperature=None):
+    def turn_on_resistor(self, temperature=None):
         if temperature is not None:
-            self.comunication_serial.write("turn_on_resistor , %s" % pot %
-                                           "%.2f" % temperature)
+            self.comunication_serial.write(
+                "turn_on_resistor_1:%.2f" % temperature
+            )
         else:
-            self.comunication_serial.write("turn_on_resistor , %s" % pot)
+            self.comunication_serial.write("turn_on_resistor_2")
 
     # Boiling Stage Serial Comunication
     def add_hop(self, engine_id):
-        self.comunication_serial.write("add_hop , %d" % engine_id)
+        self.comunication_serial.write("add_hop:%d" % engine_id)
 
     def turn_off_resistor(self, pot):
-        self.comunication_serial.write("turn_off_resistor , %s" % pot)
+        self.comunication_serial.write("turn_off_resistor_%d" % pot)
 
     # Cooling Stage Serial Comunication
     def turn_on_chiller(self):
@@ -48,16 +49,16 @@ class Comunication(object):
 
     # Fermentation Stage Serial Comunication
     def turn_on_freezer(self, temperature):
-        self.comunication_serial.write("turn_on_freezer , %.2f" % temperature)
+        self.comunication_serial.write("turn_on_freezer:%.2f" % temperature)
 
     # Common Stages Serial Comunication
     def activate_alarm(self):
         self.comunication_serial.write("activate_alarm")
 
-    def read_thermal_sensor(self, location):
-        self.comunication_serial.write("read_thermal_sensor , %s" % location)
+    def read_thermal_sensor(self):
+        self.comunication_serial.write("read_thermal_sensor")
         temperature = self.comunication_serial.readline()
         return temperature
 
-    def end_stage(self, stage_name):
-        self.comunication_serial.write("End %s" % stage_name)
+    def end_stage(self):
+        self.comunication_serial.write("end")
