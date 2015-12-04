@@ -1,7 +1,7 @@
-from monitoring.models import ThermalSensor
 from controlling.models import Hop
 from controlling.models import Heat
 from controlling.stages import cooling
+from controlling.comunication import Comunication
 from django.utils import timezone
 from datetime import timedelta
 import logging
@@ -22,6 +22,8 @@ class BoilingControll(object):
         process.actual_hop = Hop.objects.get(pk=self.hop_order.get('1'))
         process.save()
         self.process = process
+        self.serial_comunication = Comunication()
+        self.serial_comunication.turn_off_resistor(1)
 
     def handle_states(self):
         state = self.process.state
@@ -38,7 +40,8 @@ class BoilingControll(object):
             self.continue_boiling()
 
     def warm_must(self):
-        temperature = ThermalSensor.get_current_temperature_in('pot2')
+        self.serial_comunication.turn_on_resistor()
+        temperature = self.serial_comunication.read_thermal_sensor()
         if temperature < self.process.actual_heat.temperature:
             logger.info("[Boiling] Temperature less than actual "
                         "heat temperature")
@@ -57,6 +60,7 @@ class BoilingControll(object):
 
     def add_hops(self):
         if self.process.change_hop():
+            self.serial_comunication.add_hop(self.process.actual_hop_id)
             logger.info('[Boiling] Hop has been added to the pot!')
             if self.check_next():
                 hops = Hop.objects.get(pk=self.get_next_hop())
@@ -78,6 +82,10 @@ class BoilingControll(object):
             logger.info("[Boiling] Boiling stage completed!"
                         "New state: turn_on_chiller")
             self.process.state = cooling.STATES.get('turn_on_chiller')
+            self.serial_comunication.turn_of_resistor(2)
+        else:
+            # No more acts
+            pass
 
     def check_next(self):
         if self.process.next_hop <= len(self.hop_order):
