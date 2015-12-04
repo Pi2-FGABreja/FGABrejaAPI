@@ -16,6 +16,7 @@ class FermentationControll(object):
         self.process = process
         self.freezer_temperature = self.process.recipe.fermentation_temperature
         self.serial_comunication = Comunication()
+        self.serial_comunication.activate_alarm()
 
     def handle_states(self):
         state = self.process.state

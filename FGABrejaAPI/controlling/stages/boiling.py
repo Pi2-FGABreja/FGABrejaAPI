@@ -23,7 +23,7 @@ class BoilingControll(object):
         process.save()
         self.process = process
         self.serial_comunication = Comunication()
-        self.serial_comunication.turn_off_resistor(1)
+        self.serial_comunication.turn_on_resistor()
 
     def handle_states(self):
         state = self.process.state
@@ -40,7 +40,6 @@ class BoilingControll(object):
             self.continue_boiling()
 
     def warm_must(self):
-        self.serial_comunication.turn_on_resistor()
         temperature = self.serial_comunication.read_thermal_sensor()
         if temperature < self.process.actual_heat.temperature:
             logger.info("[Boiling] Temperature less than actual "

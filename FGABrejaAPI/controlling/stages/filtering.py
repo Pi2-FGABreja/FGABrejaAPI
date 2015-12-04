@@ -18,6 +18,7 @@ class FilteringControll(object):
     def __init__(self, process):
         self.process = process
         self.serial_comunication = Comunication()
+        self.serial_comunication.turn_off_resistor(1)
 
     def handle_states(self):
         state = self.process.state
@@ -35,6 +36,7 @@ class FilteringControll(object):
             self.stop_water()
 
     def open_pot_valve(self):
+        self.serial_comunication.activate_alarm()
         now = timezone.now()
         minutes = timedelta(minutes=1)
         if now > self.process.filtering_init + minutes:

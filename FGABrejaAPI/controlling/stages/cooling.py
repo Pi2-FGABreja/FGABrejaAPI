@@ -31,7 +31,7 @@ class CoolingControll(object):
 
     def check_temperature(self):
         temperature = self.serial_comunication.read_thermal_sensor()
-        if temperature < 20.0:
+        if temperature < 2:
             logger.info("[Cooling] Temperature is lower than 20 degrees")
             self.serial_comunication.turn_off_chiller()
             logger.info("[Cooling] Turning off water on chiller")
