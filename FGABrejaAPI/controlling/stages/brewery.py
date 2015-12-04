@@ -36,13 +36,14 @@ class BreweryControll(object):
             self.heat_controll()
 
     def initial_boiling(self):
-        engine_is_on = self.serial_comunication.get_engine_state()
+        # engine_is_on = self.serial_comunication.get_engine_state()
         boiling_temperature = self.process.recipe.initial_boiling_temperature
 
-        while engine_is_on != "True":
-            self.serial_comunication.turn_on_engine()
-
+        # while engine_is_on != "True":
+        #     self.serial_comunication.turn_on_engine()
+        print("TURN ON RESISTOR")
         self.serial_comunication.turn_on_resistor(boiling_temperature)
+        print("READ THERMAL SENSOR")
         temperature = self.serial_comunication.read_thermal_sensor()
 
         if temperature < boiling_temperature:
@@ -55,11 +56,13 @@ class BreweryControll(object):
                         "than %.2f" % boiling_temperature)
             # Maintain temperature
             self.process.state = STATES.get('insert_malt')
+            print("ACTIVATE ALARM")
             self.serial_comunication.activate_alarm()
             logger.info("[Brewery] State changed! New state: insert_malt")
         self.process.save()
 
     def heating(self):
+        print("READ THERMAL SENSOR")
         temperature = self.serial_comunication.read_thermal_sensor()
         if temperature < self.process.actual_heat.temperature:
             logger.info("[Brewery] Temperature less than actual "
@@ -85,6 +88,7 @@ class BreweryControll(object):
                 logger.info("[Brewery] State changed! New state: heating")
             else:
                 self.process.state = STATES.get('iodine_test')
+                print("ACITVATE ALARM")
                 self.serial_comunication.activate_alarm()
                 logger.info("[Brewery] State changed! New state: iodine_test")
         else:

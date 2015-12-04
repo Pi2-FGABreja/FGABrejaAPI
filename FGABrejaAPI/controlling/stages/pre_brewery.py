@@ -31,6 +31,7 @@ class PreBreweryControll(object):
 
     def insert_water(self):
         self.valve = Valve.objects.get(pk=1)
+        print("INSERT WATER")
         self.serial_comunication.insert_water()
         self.valve.is_opened = 1
         self.process.state = STATES.get('check_level')
@@ -38,6 +39,7 @@ class PreBreweryControll(object):
         logger.info("[PreBrewery] State changed! New state: check_level")
 
     def check_level(self):
+        print("GET POT LEVEL")
         level = self.serial_comunication.get_pot_level()
         if level:
             logger.info("[PreBrewery] Pot water level reached")
@@ -50,10 +52,12 @@ class PreBreweryControll(object):
             self.process.save()
 
     def stop_water(self):
+        print("STOP WATER")
         self.serial_comunication.stop_water()
         self.valve.is_opened = 0
         self.process.state = brewery.STATES.get('initial_boiling')
         self.process.save()
         logger.info("[PreBrewery] State changed! New state: "
                     "initial_boiling (from brewery process)")
+        print("TURN ON ENGINE")
         self.serial_comunication.turn_on_engine()
