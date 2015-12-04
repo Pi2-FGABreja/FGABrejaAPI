@@ -1,4 +1,4 @@
-from monitoring.models import ThermalSensor
+from controlling.comunication import Comunication
 import logging
 
 logger = logging.getLogger('fga-breja')
@@ -11,6 +11,7 @@ class CoolingControll(object):
 
     def __init__(self, process):
         self.process = process
+        self.serial_comunication = Comunication()
 
     def handle_states(self):
         state = self.process.state
@@ -22,15 +23,17 @@ class CoolingControll(object):
             self.check_temperature()
 
     def turn_on_chiller(self):
+        self.serial_comunication.turn_on_chiller()
         logger.info('[Cooling] Turning on water on chiller')
         self.process.state = STATES.get('check_temperature')
         self.process.save()
         logger.info("[Cooling] State changed! New state: check_temperature")
 
     def check_temperature(self):
-        temperature = ThermalSensor.get_current_temperature_in('pot2')
+        temperature = self.serial_comunication.read_thermal_sensor()
         if temperature < 20.0:
             logger.info("[Cooling] Temperature is lower than 20 degrees")
+            self.serial_comunication.turn_off_chiller()
             logger.info("[Cooling] Turning off water on chiller")
             self.process.state = STATES.get('check_temperature')
             self.process.save()
