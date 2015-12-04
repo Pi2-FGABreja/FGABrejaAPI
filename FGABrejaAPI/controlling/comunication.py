@@ -11,6 +11,7 @@ class Comunication(object):
         self.comunication_serial.write("insert_water")
 
     def get_pot_level(self):
+        self.comunication_serial.write("check_level")
         pot_level = self.comunication_serial.readline()
         return pot_level
 

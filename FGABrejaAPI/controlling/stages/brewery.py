@@ -1,5 +1,5 @@
-from monitoring.models import ThermalSensor
 from controlling.models import Heat
+from controlling.comunication import Comunication
 from django.utils import timezone
 import logging
 
@@ -21,6 +21,7 @@ class BreweryControll(object):
         process.save()
         self.process = process
         self.next_heat = '2'
+        self.serial_comunication = Comunication()
 
     def handle_states(self):
         state = self.process.state
@@ -35,8 +36,10 @@ class BreweryControll(object):
             self.heat_controll()
 
     def initial_boiling(self):
+        self.serial_comunication.turn_on_engine()
         boiling_temperature = self.process.recipe.initial_boiling_temperature
-        temperature = ThermalSensor.get_current_temperature_in('pot1')
+        self.serial_comunication.turn_on_resistor(boiling_temperature)
+        temperature = self.serial_comunication.read_thermal_sensor()
         if temperature < boiling_temperature:
             logger.info("[Brewery] Actual temperature is lower "
                         "than %.2f" % boiling_temperature)
@@ -51,7 +54,7 @@ class BreweryControll(object):
         self.process.save()
 
     def heating(self):
-        temperature = ThermalSensor.get_current_temperature_in('pot1')
+        temperature = self.serial_comunication.read_thermal_sensor()
         if temperature < self.process.actual_heat.temperature:
             logger.info("[Brewery] Temperature less than actual "
                         "heat temperature")
