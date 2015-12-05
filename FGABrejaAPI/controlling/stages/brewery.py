@@ -31,6 +31,8 @@ class BreweryControll(object):
             self.initial_boiling()
         elif state == STATES.get('heating'):
             logger.info("[Brewery] Function defined: heating")
+            print("TURN ON ENGINE")
+            self.serial_comunication.turn_on_engine()
             self.heating()
         elif state == STATES.get('heat_controll'):
             logger.info("[Brewery] Function defined: heat_controll")
