@@ -82,10 +82,11 @@ class BoilingControll(object):
             logger.info("[Boiling] Boiling stage completed!"
                         "New state: turn_on_chiller")
             self.process.state = cooling.STATES.get('turn_on_chiller')
-            self.serial_comunication.turn_of_resistor(2)
+            self.serial_comunication.turn_off_resistor(2)
         else:
             # No more acts
             pass
+        self.process.save()
 
     def check_next(self):
         if self.process.next_hop <= len(self.hop_order):

@@ -7,8 +7,7 @@ logger = logging.getLogger('fga-breja')
 
 STATES = {'chill_must': 18,
           'maintain_temperature': 19,
-          'verify_airlock': 20,
-          'process_end': 21}
+          'process_end': 20}
 
 
 class FermentationControll(object):
@@ -28,9 +27,6 @@ class FermentationControll(object):
             logger.info("[Fermentation] Function defined: "
                         "maintain_temperature")
             self.maintain_temperature()
-        elif state == STATES.get('verify_airlock'):
-            logger.info("[Fermentation] Function defined: verify_airlock")
-            self.verify_airlock()
 
     def chill_must(self):
         self.serial_comunication.turn_on_freezer(self.freezer_temperature)
@@ -59,19 +55,5 @@ class FermentationControll(object):
         else:
             logger.info("[Fermentation] Temperature not on range")
             self.process.state = STATES.get('chill_must')
-            pass
-        self.process.save()
-
-    def verify_airlock(self):
-        has_boubles = True
-        if has_boubles:
-            logger.info("[Fermentation] No more boubles, "
-                        "fermentation is done!")
-            self.serial_comunication.activate_alarm()
-            self.process.state = STATES.get("process_end")
-        else:
-            logger.info("[Fermentation] Airlock has boubles "
-                        "fermentation still in process")
-            self.process.state = STATES.get('maintain_temperature')
             pass
         self.process.save()

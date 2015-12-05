@@ -1,3 +1,4 @@
+from controlling.stages import fermentation
 from controlling.comunication import Comunication
 import logging
 
@@ -35,6 +36,7 @@ class CoolingControll(object):
             logger.info("[Cooling] Temperature is lower than 20 degrees")
             self.serial_comunication.turn_off_chiller()
             logger.info("[Cooling] Turning off water on chiller")
-            self.process.state = STATES.get('check_temperature')
+            self.process.state = fermentation.STATES.get('chill_must')
             self.process.save()
-            logger.info("[Cooling] State changed! New state: ---")
+            logger.info("[Cooling] Cooling stage completed! "
+                        "New state: chill_must")
