@@ -55,7 +55,7 @@ class FilteringControll(object):
 
     def check_level(self):
         logger.info("[Filtering] Checking level of pot2. . .")
-        level = LevelSensor.get_current_water_level_in('pot2')
+        level = LevelSensor.get_current_water_level()
 
         if level:
             logger.info("[Filtering] Pot water level reached")

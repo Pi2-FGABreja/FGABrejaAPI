@@ -1,3 +1,4 @@
+from monitoring.models import ThermalSensor
 from controlling.models import Heat
 from controlling.comunication import Comunication
 from django.utils import timezone
@@ -44,7 +45,7 @@ class BreweryControll(object):
         print("TURN ON RESISTOR")
         self.serial_comunication.turn_on_resistor(boiling_temperature)
         print("READ THERMAL SENSOR")
-        temperature = self.serial_comunication.read_thermal_sensor()
+        temperature = ThermalSensor.get_current_temperature()
 
         if temperature < boiling_temperature:
             logger.info("[Brewery] Actual temperature is lower "
@@ -63,7 +64,7 @@ class BreweryControll(object):
 
     def heating(self):
         print("READ THERMAL SENSOR")
-        temperature = self.serial_comunication.read_thermal_sensor()
+        temperature = ThermalSensor.get_current_temperature()
         if temperature < self.process.actual_heat.temperature:
             logger.info("[Brewery] Temperature less than actual "
                         "heat temperature")

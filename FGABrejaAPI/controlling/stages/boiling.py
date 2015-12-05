@@ -1,3 +1,4 @@
+from monitoring.models import ThermalSensor
 from controlling.models import Hop
 from controlling.models import Heat
 from controlling.stages import cooling
@@ -40,7 +41,7 @@ class BoilingControll(object):
             self.continue_boiling()
 
     def warm_must(self):
-        temperature = self.serial_comunication.read_thermal_sensor()
+        temperature = ThermalSensor.get_current_temperature()
         if temperature < self.process.actual_heat.temperature:
             logger.info("[Boiling] Temperature less than actual "
                         "heat temperature")

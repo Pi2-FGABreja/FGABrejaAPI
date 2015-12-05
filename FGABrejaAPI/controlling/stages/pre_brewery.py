@@ -1,3 +1,4 @@
+from monitoring.models import LevelSensor
 from controlling.models import Valve
 from controlling.stages import brewery
 from controlling.comunication import Comunication
@@ -40,7 +41,7 @@ class PreBreweryControll(object):
 
     def check_level(self):
         print("GET POT LEVEL")
-        level = self.serial_comunication.get_pot_level()
+        level = LevelSensor.get_current_water_level()
         if level:
             logger.info("[PreBrewery] Pot water level reached")
             self.process.state = STATES.get('stop_water')

@@ -1,6 +1,6 @@
+from controlling.comunication import Comunication
 from django.db import models
 from distutils.util import strtobool
-import random
 
 
 class SensorManager(models.Manager):
@@ -39,14 +39,13 @@ class Sensor(models.Model):
 
     objects = models.Manager()
     read = SensorManager()
+    serial_comunication = Comunication()
 
     def read_sensor(self):
         if self.sensor_type == "thermal":
-            self.value = random.randint(20, 100)
-        if self.sensor_type == "ldr":
-            self.value = random.choice([True, False])
+            self.value = self.serial_comunication.read_thermal_sensor()
         if self.sensor_type == "level":
-            self.value = random.choice([True, False])
+            self.value = self.serial_comunication.get_pot_level()
         self.save()
 
     def __str__(self):
@@ -57,32 +56,16 @@ class Sensor(models.Model):
 class ThermalSensor(object):
 
     @classmethod
-    def get_current_temperature_in(cls, location):
+    def get_current_temperature(cls):
         sensors = Sensor.read.thermal()
-        sensors = sensors.filter(location=location)
-        return cls.calculate_temperature_average(sensors)
-
-    @classmethod
-    def calculate_temperature_average(cls, sensors):
-        temperature_sum = 0
-        for sensor in sensors:
-            temperature_sum += float(sensor.value)
-        return temperature_sum / sensors.count()
+        sensors = sensors.get(pk=1)
+        return float(sensors.value)
 
 
 class LevelSensor(object):
 
     @classmethod
-    def get_current_water_level_in(cls, location):
+    def get_current_water_level(cls):
         sensors = Sensor.read.level()
-        sensors = sensors.get(location=location)
-        return bool(strtobool(sensors.value))
-
-
-class LdrSensor(object):
-
-    @classmethod
-    def get_read_from_airlock(cls, location):
-        sensors = Sensor.read.ldr()
-        sensors = sensors.get(location=location)
+        sensors = sensors.get(pk=2)
         return bool(strtobool(sensors.value))

@@ -1,4 +1,5 @@
-from monitoring.models import LdrSensor
+
+from monitoring.models import ThermalSensor
 from controlling.comunication import Comunication
 import logging
 
@@ -34,7 +35,7 @@ class FermentationControll(object):
     def chill_must(self):
         self.serial_comunication.turn_on_freezer(self.freezer_temperature)
         logger.info('[Fermentation] Cooling must on the freezer')
-        temperature = self.serial_comunication.read_thermal_sensor()
+        temperature = ThermalSensor.get_current_temperature()
         if temperature > self.freezer_temperature:
             logger.info("[Fermentation] Fermentation temperature not reached")
             self.process.state = STATES.get('chill_must')
@@ -48,7 +49,7 @@ class FermentationControll(object):
         self.process.save()
 
     def maintain_temperature(self):
-        temperature = self.serial_comunication.read_thermal_sensor()
+        temperature = ThermalSensor.get_current_temperature()
         if self.freezer_temperature - 2 <= temperature \
                 <= self.freezer_temperature + 2:
             logger.info("[Fermentation] Temperature on range")
@@ -62,7 +63,7 @@ class FermentationControll(object):
         self.process.save()
 
     def verify_airlock(self):
-        has_boubles = LdrSensor.get_read_from_airlock('pot3')
+        has_boubles = True
         if has_boubles:
             logger.info("[Fermentation] No more boubles, "
                         "fermentation is done!")

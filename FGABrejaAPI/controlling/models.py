@@ -37,10 +37,10 @@ class Recipe(models.Model):
         hop_order = {}
         for index, hop in enumerate(order, start=1):
             hop_order[index] = hop.id
-        self.hop_order = json.dumps(hop_order)
+        self.hops_order = json.dumps(hop_order)
 
     def get_hop_order(self):
-        return json.loads(self.hop_order)
+        return json.loads(self.hops_order)
 
     def set_heat_order(self, order):
         heat_order = {}
