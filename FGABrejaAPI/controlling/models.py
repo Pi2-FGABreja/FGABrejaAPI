@@ -37,10 +37,10 @@ class Recipe(models.Model):
         hop_order = {}
         for index, hop in enumerate(order, start=1):
             hop_order[index] = hop.id
-        self.hop_order = json.dumps(hop_order)
+        self.hops_order = json.dumps(hop_order)
 
     def get_hop_order(self):
-        return json.loads(self.hop_order)
+        return json.loads(self.hops_order)
 
     def set_heat_order(self, order):
         heat_order = {}
@@ -58,7 +58,7 @@ class Process(models.Model):
     recipe = models.ForeignKey('Recipe')
     iodine_test = models.BooleanField(default=False)
     malt = models.BooleanField(default=False)
-    state = models.IntegerField()
+    state = models.IntegerField(default=1)
     is_active = models.BooleanField(default=True)
 
     level_pot1 = models.BooleanField(default=False)

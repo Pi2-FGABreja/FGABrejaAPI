@@ -1,5 +1,6 @@
 from monitoring.models import LevelSensor
 from controlling.stages import boiling
+from controlling.stages.serial_calls import SerialCalls
 from django.utils import timezone
 from datetime import timedelta
 import logging
@@ -16,6 +17,8 @@ class FilteringControll(object):
 
     def __init__(self, process):
         self.process = process
+        self.serial_comunication = SerialCalls()
+        self.serial_comunication.turn_off_resistor(1)
 
     def handle_states(self):
         state = self.process.state
@@ -33,15 +36,18 @@ class FilteringControll(object):
             self.stop_water()
 
     def open_pot_valve(self):
+        self.serial_comunication.activate_alarm()
         now = timezone.now()
         minutes = timedelta(minutes=1)
         if now > self.process.filtering_init + minutes:
             logger.info("[Filtering] 20 minutes after filtering init")
+            self.serial_comunication.activate_alarm()
             self.process.state = STATES.get('insert_water')
             self.process.save()
             logger.info("[Filtering] State changed! New state: insert_water")
 
     def insert_water(self):
+        self.serial_comunication.insert_water()
         logger.info("[Filtering] Turn on the water")
         self.process.state = STATES.get('check_level')
         self.process.save()
@@ -49,7 +55,7 @@ class FilteringControll(object):
 
     def check_level(self):
         logger.info("[Filtering] Checking level of pot2. . .")
-        level = LevelSensor.get_current_water_level_in('pot2')
+        level = LevelSensor.get_current_water_level()
 
         if level:
             logger.info("[Filtering] Pot water level reached")
@@ -60,6 +66,7 @@ class FilteringControll(object):
             logger.info("[Filtering] Pot water level not reached")
 
     def stop_water(self):
+        self.serial_comunication.stop_water()
         logger.info("[Filtering] Closing valve")
         self.process.state = boiling.STATES.get('warm_must')
         self.process.save()
