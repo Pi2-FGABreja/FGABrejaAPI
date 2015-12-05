@@ -58,7 +58,7 @@ class Process(models.Model):
     recipe = models.ForeignKey('Recipe')
     iodine_test = models.BooleanField(default=False)
     malt = models.BooleanField(default=False)
-    state = models.IntegerField()
+    state = models.IntegerField(default=1)
     is_active = models.BooleanField(default=True)
 
     level_pot1 = models.BooleanField(default=False)

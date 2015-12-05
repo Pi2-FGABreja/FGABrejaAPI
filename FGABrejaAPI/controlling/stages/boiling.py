@@ -2,7 +2,7 @@ from monitoring.models import ThermalSensor
 from controlling.models import Hop
 from controlling.models import Heat
 from controlling.stages import cooling
-from controlling.comunication import Comunication
+from controlling.stages.serial_calls import SerialCalls
 from django.utils import timezone
 from datetime import timedelta
 import logging
@@ -23,7 +23,7 @@ class BoilingControll(object):
         process.actual_hop = Hop.objects.get(pk=self.hop_order.get('1'))
         process.save()
         self.process = process
-        self.serial_comunication = Comunication()
+        self.serial_comunication = SerialCalls()
         self.serial_comunication.turn_on_resistor()
 
     def handle_states(self):

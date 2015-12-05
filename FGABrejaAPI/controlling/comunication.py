@@ -10,7 +10,7 @@ class Comunication(object):
         return cls.instance
 
     def __init__(self):
-        self.comunication_serial = serial.Serial(0)
+        self.comunication_serial = serial.Serial('/dev/cu.usbmodemfa131', 9600)
 
     # Pre Brewery Stage Serial Comunication
     def insert_water(self):
@@ -33,11 +33,6 @@ class Comunication(object):
     def turn_on_engine(self):
         self.comunication_serial.write("turn_on_engine".encode())
         time.sleep(2)
-
-    def get_engine_state(self):
-        engine_state = self.comunication_serial.readline()
-        time.sleep(2)
-        return engine_state
 
     def turn_on_resistor(self, temperature=None):
         if temperature is not None:
@@ -83,7 +78,7 @@ class Comunication(object):
         # self.comunication_serial.write("read_thermal_sensor".encode())
         # temperature = self.comunication_serial.readline()
         time.sleep(2)
-        return 70.0
+        return 1.0
 
     def end_stage(self):
         self.comunication_serial.write("end".encode())

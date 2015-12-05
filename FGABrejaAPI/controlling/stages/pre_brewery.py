@@ -1,7 +1,7 @@
 from monitoring.models import LevelSensor
 from controlling.models import Valve
 from controlling.stages import brewery
-from controlling.comunication import Comunication
+from controlling.stages.serial_calls import SerialCalls
 import logging
 
 logger = logging.getLogger('fga-breja')
@@ -16,7 +16,7 @@ class PreBreweryControll(object):
     def __init__(self, process):
         self.process = process
         self.valve = Valve.objects.get(pk=1)
-        self.serial_comunication = Comunication()
+        self.serial_comunication = SerialCalls()
 
     def handle_states(self):
         state = self.process.state

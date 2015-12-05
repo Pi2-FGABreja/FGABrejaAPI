@@ -1,6 +1,5 @@
-
 from monitoring.models import ThermalSensor
-from controlling.comunication import Comunication
+from controlling.stages.serial_calls import SerialCalls
 import logging
 
 logger = logging.getLogger('fga-breja')
@@ -15,7 +14,7 @@ class FermentationControll(object):
     def __init__(self, process):
         self.process = process
         self.freezer_temperature = self.process.recipe.fermentation_temperature
-        self.serial_comunication = Comunication()
+        self.serial_comunication = SerialCalls()
         self.serial_comunication.activate_alarm()
 
     def handle_states(self):

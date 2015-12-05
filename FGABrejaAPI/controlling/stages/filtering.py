@@ -1,6 +1,6 @@
 from monitoring.models import LevelSensor
 from controlling.stages import boiling
-from controlling.comunication import Comunication
+from controlling.stages.serial_calls import SerialCalls
 from django.utils import timezone
 from datetime import timedelta
 import logging
@@ -17,7 +17,7 @@ class FilteringControll(object):
 
     def __init__(self, process):
         self.process = process
-        self.serial_comunication = Comunication()
+        self.serial_comunication = SerialCalls()
         self.serial_comunication.turn_off_resistor(1)
 
     def handle_states(self):

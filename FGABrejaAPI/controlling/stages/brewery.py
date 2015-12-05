@@ -1,6 +1,6 @@
 from monitoring.models import ThermalSensor
 from controlling.models import Heat
-from controlling.comunication import Comunication
+from controlling.stages.serial_calls import SerialCalls
 from django.utils import timezone
 import logging
 
@@ -22,7 +22,7 @@ class BreweryControll(object):
         process.save()
         self.process = process
         self.next_heat = '2'
-        self.serial_comunication = Comunication()
+        self.serial_comunication = SerialCalls()
 
     def handle_states(self):
         state = self.process.state
@@ -91,6 +91,7 @@ class BreweryControll(object):
                 self.process.state = STATES.get('iodine_test')
                 print("ACITVATE ALARM")
                 self.serial_comunication.activate_alarm()
+                self.serial_comunication.turn_off_resistor(1)
                 logger.info("[Brewery] State changed! New state: iodine_test")
         else:
             # Maintain temperature
