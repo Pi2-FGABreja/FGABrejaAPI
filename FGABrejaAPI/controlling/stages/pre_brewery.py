@@ -60,5 +60,3 @@ class PreBreweryControll(object):
         self.process.save()
         logger.info("[PreBrewery] State changed! New state: "
                     "initial_boiling (from brewery process)")
-        print("TURN ON ENGINE")
-        self.serial_comunication.turn_on_engine()
