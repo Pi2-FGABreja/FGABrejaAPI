@@ -21,8 +21,9 @@ class Comunication(object):
         self.comunication_serial.write("check_level".encode())
         time.sleep(2)
         pot_level = self.comunication_serial.readline()
+        print(pot_level)
         pot_level = pot_level.splitlines()
-        return pot_level[0]
+        return bool(pot_level[0])
 
     def stop_water(self):
         self.comunication_serial.write("stop_water".encode())

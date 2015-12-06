@@ -1,4 +1,3 @@
-from monitoring.models import LevelSensor
 from controlling.stages import boiling
 from controlling.stages.serial_calls import SerialCalls
 from django.utils import timezone
@@ -40,6 +39,7 @@ class FilteringControll(object):
         now = timezone.now()
         minutes = timedelta(minutes=1)
         if now > self.process.filtering_init + minutes:
+            self.process.filtering_init = now
             logger.info("[Filtering] 20 minutes after filtering init")
             self.serial_comunication.activate_alarm()
             self.process.state = STATES.get('insert_water')
@@ -55,9 +55,10 @@ class FilteringControll(object):
 
     def check_level(self):
         logger.info("[Filtering] Checking level of pot2. . .")
-        level = LevelSensor.get_current_water_level()
+        now = timezone.now()
+        minutes = timedelta(minutes=10)
 
-        if level:
+        if now > self.process.filtering_init + minutes:
             logger.info("[Filtering] Pot water level reached")
             self.process.state = STATES.get('stop_water')
             self.process.save()
