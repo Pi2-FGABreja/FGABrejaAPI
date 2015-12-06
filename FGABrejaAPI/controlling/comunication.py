@@ -10,7 +10,7 @@ class Comunication(object):
         return cls.instance
 
     def __init__(self):
-        self.comunication_serial = serial.Serial()
+        self.comunication_serial = serial.Serial('/dev/ttyACM0/', 9600)
 
     # Pre Brewery Stage Serial Comunication
     def insert_water(self):
@@ -18,11 +18,9 @@ class Comunication(object):
         time.sleep(2)
 
     def get_pot_level(self):
-        # self.comunication_serial.write("check_level".encode())
-        # pot_level = self.comunication_serial.readline()
+        self.comunication_serial.write("check_level".encode())
         time.sleep(2)
-        import random
-        pot_level = random.choice([True, False])
+        pot_level = self.comunication_serial.readline()
         return pot_level
 
     def stop_water(self):
@@ -75,10 +73,10 @@ class Comunication(object):
         time.sleep(2)
 
     def read_thermal_sensor(self):
-        # self.comunication_serial.write("read_thermal_sensor".encode())
-        # temperature = self.comunication_serial.readline()
+        self.comunication_serial.write("read_thermal_sensor".encode())
         time.sleep(2)
-        return 1.0
+        temperature = self.comunication_serial.readline()
+        return temperature
 
     def end_stage(self):
         self.comunication_serial.write("end".encode())
