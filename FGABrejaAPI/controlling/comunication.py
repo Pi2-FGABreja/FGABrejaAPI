@@ -21,7 +21,8 @@ class Comunication(object):
         self.comunication_serial.write("check_level".encode())
         time.sleep(2)
         pot_level = self.comunication_serial.readline()
-        return pot_level
+        pot_level = pot_level.splitlines()
+        return pot_level[0]
 
     def stop_water(self):
         self.comunication_serial.write("stop_water".encode())
@@ -76,7 +77,8 @@ class Comunication(object):
         self.comunication_serial.write("read_thermal_sensor".encode())
         time.sleep(2)
         temperature = self.comunication_serial.readline()
-        return temperature
+        temperature = temperature.splitlines()
+        return temperature[0]
 
     def end_stage(self):
         self.comunication_serial.write("end".encode())
