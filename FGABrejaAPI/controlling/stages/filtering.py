@@ -17,7 +17,6 @@ class FilteringControll(object):
     def __init__(self, process):
         self.process = process
         self.serial_comunication = SerialCalls()
-        self.serial_comunication.turn_off_resistor(1)
 
     def handle_states(self):
         state = self.process.state
