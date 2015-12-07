@@ -6,7 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/Pi2-FGABreja/FGABrejaAPI/badge.svg?branch=master&service=github)](https://coveralls.io/github/Pi2-FGABreja/FGABrejaAPI?branch=master)
 
 
-###Setting up development environment
+### Setting up development environment
 
 ```
 $ sudo apt-get install python3 python3-pip
@@ -14,11 +14,12 @@ $ sudo pip3 install -r requirements.txt
 ```
 
 ```
-$ python run.py
+$ cp settings/databases settings/databases.py
+$ cp settings/security settings/security.py
 ```
 
-###Testing
-
 ```
-$ python test.py
+$ python3 manage.py makemigrations
+$ python3 manage.py migrate
+$ python3 manage.py runserver
 ```
