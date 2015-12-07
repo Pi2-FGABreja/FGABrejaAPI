@@ -26,8 +26,6 @@ class BoilingControll(object):
         state = self.process.state
         if state == STATES.get('warm_must'):
             logger.info("[Boiling] Function defined: warm_must")
-            self.process.actual_heat.temperature = \
-                self.process.recipe.boiling_temperature
             self.warm_must()
         elif state == STATES.get('add_hops'):
             logger.info("[Boiling] Function defined: add_hops")
@@ -42,8 +40,7 @@ class BoilingControll(object):
         if temperature < self.process.recipe.boiling_temperature:
             logger.info("[Boiling] Temperature less than actual "
                         "heat temperature")
-            self.serial_comunication.turn_on_resistor(
-                self.process.recipe.boiling_temperature)
+            self.serial_comunication.turn_on_resistor()
         else:
             logger.info("[Boiling] Temperature reached!")
             self.process.state = STATES.get('add_hops')
@@ -74,7 +71,7 @@ class BoilingControll(object):
             logger.info("[Boiling] Boiling stage completed!"
                         "New state: turn_on_chiller")
             self.process.state = cooling.STATES.get('turn_on_chiller')
-            self.serial_comunication.turn_off_resistor(1)
+            self.serial_comunication.turn_off_resistor(2)
         self.process.save()
 
     def check_next(self):

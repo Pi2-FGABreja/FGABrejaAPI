@@ -34,9 +34,6 @@ class FilteringControll(object):
             self.stop_water()
 
     def open_pot_valve(self):
-        self.serial_comunication.activate_alarm()
-        self.serial_comunication.turn_off_resistor(1)
-        self.serial_comunication.turn_off_engine()
         now = timezone.now()
         minutes = timedelta(minutes=1)
         if now > self.process.filtering_init + minutes:
@@ -72,5 +69,6 @@ class FilteringControll(object):
         logger.info("[Filtering] Closing valve")
         self.process.state = boiling.STATES.get('warm_must')
         self.process.save()
+        self.serial_comunication.turn_on_resistor()
         logger.info("[Filtering] State changed! New state: warm_must "
                     "(from boiling process)")

@@ -24,6 +24,9 @@ class SerialCalls(object):
     def turn_on_engine(self):
         self.serial_call.turn_on_engine()
 
+    def turn_off_engine(self):
+        self.serial_call.turn_off_engine()
+
     def turn_on_resistor(self, temperature=None):
         if temperature is not None:
             self.serial_call.turn_on_resistor(temperature)

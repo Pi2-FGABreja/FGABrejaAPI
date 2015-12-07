@@ -48,9 +48,9 @@ class FermentationControll(object):
         if self.freezer_temperature - 2 <= temperature \
                 <= self.freezer_temperature + 2:
             logger.info("[Fermentation] Temperature on range")
-            self.process.state = STATES.get('verify_airlock')
+            self.process.state = STATES.get('process_end')
             logger.info("[Fermentation] State changed! "
-                        "New state: verify_airlock")
+                        "New state: process_end")
         else:
             logger.info("[Fermentation] Temperature not on range")
             self.process.state = STATES.get('chill_must')

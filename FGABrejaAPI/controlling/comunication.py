@@ -10,7 +10,7 @@ class Comunication(object):
         return cls.instance
 
     def __init__(self):
-        self.comunication_serial = serial.Serial()
+        self.comunication_serial = serial.Serial('/dev/ttyACM0', 9600)
 
     # Pre Brewery Stage Serial Comunication
     def insert_water(self):

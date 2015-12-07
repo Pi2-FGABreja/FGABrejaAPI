@@ -38,7 +38,6 @@ class BreweryControll(object):
 
     def initial_boiling(self):
         boiling_temperature = self.process.recipe.initial_boiling_temperature
-
         self.serial_comunication.turn_on_resistor(boiling_temperature)
         temperature = ThermalSensor.get_current_temperature()
         logger.info("[Brewery] Temperature: %.2f" % temperature)
@@ -51,22 +50,24 @@ class BreweryControll(object):
         else:
             logger.info("[Brewery] Actual temperature is greater "
                         "than %.2f" % boiling_temperature)
-            self.serial_comunication.turn_on_resistor(boiling_temperature)
+            self.serial_comunication.turn_off_resistor(1)
             self.process.state = STATES.get('insert_malt')
             self.serial_comunication.activate_alarm()
             logger.info("[Brewery] State changed! New state: insert_malt")
         self.process.save()
 
     def heating(self):
+        self.serial_comunication.turn_on_resistor(
+            self.process.recipe.boiling_temperature)
         logger.info("[Brewery] Function defined: heating")
         temperature = ThermalSensor.get_current_temperature()
+
         logger.info("[Brewery] Temperature: %.2f" % temperature)
         if temperature < self.process.actual_heat.temperature:
             logger.info("[Brewery] Temperature less than actual "
                         "heat temperature")
             self.serial_comunication.turn_on_resistor(
                 self.process.actual_heat.temperature)
-            pass
         else:
             logger.info("[Brewery] Temperature greater than "
                         "actual_heat temperature")
