@@ -1,5 +1,5 @@
 from settings import databases, security, static, apps
-from celery.schedules import crontab
+from datetime import timedelta
 from os import path
 BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 
@@ -41,9 +41,9 @@ CELERY_TIMEZONE = 'America/Sao_Paulo'
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 # CELERYBEAT_SCHEDULE_FILENAME = "celery-beat.schedule"
 CELERYBEAT_SCHEDULE = {
-    'add-every-60-seconds': {
+    'add-every-30-seconds': {
         'task': 'controll_process',
-        'schedule': crontab(),
+        'schedule': timedelta(seconds=30),
     },
 }
 
