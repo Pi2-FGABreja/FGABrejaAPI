@@ -36,6 +36,8 @@ class FilteringControll(object):
 
     def open_pot_valve(self):
         self.serial_comunication.activate_alarm()
+        self.serial_comunication.turn_off_resistor(1)
+        self.serial_comunication.turn_off_engine()
         now = timezone.now()
         minutes = timedelta(minutes=1)
         if now > self.process.filtering_init + minutes:
