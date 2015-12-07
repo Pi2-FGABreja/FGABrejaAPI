@@ -40,8 +40,8 @@ class Comunication(object):
 
     def turn_on_resistor(self, temperature=None):
         if temperature is not None:
-            self.turn_off_resistor(1)
-            time.sleep(2)
+            # self.turn_off_resistor(1)
+            # time.sleep(2)
             message = "turn_on_resistor_1:%.2f" % temperature
             self.comunication_serial.write(message.encode())
         else:

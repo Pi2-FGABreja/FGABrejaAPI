@@ -72,7 +72,7 @@ class Process(models.Model):
     next_heat = models.IntegerField(default=2)
 
     actual_hop = models.ForeignKey('Hop', null=True)
-    next_hop = models.IntegerField(default=2)
+    next_hop = models.IntegerField(default=1)
 
     boiling_stop_time = models.DateTimeField(null=True)
     filtering_init = models.DateTimeField(null=True)

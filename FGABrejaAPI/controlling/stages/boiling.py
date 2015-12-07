@@ -1,6 +1,5 @@
 from monitoring.models import ThermalSensor
 from controlling.models import Hop
-from controlling.models import Heat
 from controlling.stages import cooling
 from controlling.stages.serial_calls import SerialCalls
 from django.utils import timezone
@@ -17,14 +16,11 @@ STATES = {'warm_must': 13,
 class BoilingControll(object):
 
     def __init__(self, process):
-        self.heat_order = process.recipe.get_heat_order()
         self.hop_order = process.recipe.get_hop_order()
-        process.actual_heat = Heat.objects.get(pk=self.heat_order.get('1'))
         process.actual_hop = Hop.objects.get(pk=self.hop_order.get('1'))
         process.save()
         self.process = process
         self.serial_comunication = SerialCalls()
-        self.serial_comunication.turn_on_resistor()
 
     def handle_states(self):
         state = self.process.state
@@ -42,16 +38,14 @@ class BoilingControll(object):
 
     def warm_must(self):
         temperature = ThermalSensor.get_current_temperature()
-        if temperature < self.process.actual_heat.temperature:
+        logger.info("[Boiling] Temperature: %.2f" % temperature)
+        if temperature < self.process.recipe.boiling_temperature:
             logger.info("[Boiling] Temperature less than actual "
                         "heat temperature")
-            self.process.state = STATES.get('warm_must')
-            # Increase temperature
-            pass
+            self.serial_comunication.turn_on_resistor(
+                self.process.recipe.boiling_temperature)
         else:
             logger.info("[Boiling] Temperature reached!")
-            self.process.actual_hop_time = timezone.now()
-            self.process.actual_heat_time = timezone.now()
             self.process.state = STATES.get('add_hops')
             self.process.boiling_stop_time = timezone.now() + \
                 timedelta(minutes=self.process.recipe.boiling_duration)
@@ -60,7 +54,7 @@ class BoilingControll(object):
 
     def add_hops(self):
         if self.process.change_hop():
-            self.serial_comunication.add_hop(self.process.actual_hop_id)
+            self.serial_comunication.add_hop(self.process.next_hop)
             logger.info('[Boiling] Hop has been added to the pot!')
             if self.check_next():
                 hops = Hop.objects.get(pk=self.get_next_hop())
@@ -72,9 +66,7 @@ class BoilingControll(object):
                 self.process.state = STATES.get('continue_boiling')
                 logger.info("[Boiling] State changed! "
                             "New state: continue_boiling")
-        else:
-            # No more hops to add
-            pass
+
         self.process.save()
 
     def continue_boiling(self):
@@ -82,10 +74,7 @@ class BoilingControll(object):
             logger.info("[Boiling] Boiling stage completed!"
                         "New state: turn_on_chiller")
             self.process.state = cooling.STATES.get('turn_on_chiller')
-            self.serial_comunication.turn_off_resistor(2)
-        else:
-            # No more acts
-            pass
+            self.serial_comunication.turn_off_resistor(1)
         self.process.save()
 
     def check_next(self):

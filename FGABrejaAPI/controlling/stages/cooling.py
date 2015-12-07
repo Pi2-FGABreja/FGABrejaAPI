@@ -33,6 +33,7 @@ class CoolingControll(object):
 
     def check_temperature(self):
         temperature = ThermalSensor.get_current_temperature()
+        logger.info("[Cooling] Temperature: %.2f" % temperature)
         if temperature < 2:
             logger.info("[Cooling] Temperature is lower than 20 degrees")
             self.serial_comunication.turn_off_chiller()
