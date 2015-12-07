@@ -23,6 +23,7 @@ class Valve(models.Model):
 class Recipe(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
+    water_level = models.IntegerField()
     initial_boiling_temperature = models.FloatField()
     boiling_temperature = models.FloatField()
     boiling_duration = models.IntegerField()
@@ -51,6 +52,11 @@ class Recipe(models.Model):
     def get_heat_order(self):
         return json.loads(self.heat_order)
 
+    def insert_water_time(self):
+        # Assuming water flow rate is 2L/minute
+        minutes = self.water_level / 2
+        return minutes
+
 
 class Process(models.Model):
     initial_datetime = models.DateTimeField(auto_now=True)
@@ -60,9 +66,6 @@ class Process(models.Model):
     malt = models.BooleanField(default=False)
     state = models.IntegerField(default=1)
     is_active = models.BooleanField(default=True)
-
-    level_pot1 = models.BooleanField(default=False)
-    level_pot2 = models.BooleanField(default=False)
 
     actual_heat = models.ForeignKey('Heat', null=True)
     actual_heat_time = models.DateTimeField(null=True)
