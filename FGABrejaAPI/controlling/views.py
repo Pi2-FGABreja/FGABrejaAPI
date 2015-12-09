@@ -1,15 +1,14 @@
 from django.http import HttpResponse
-from controlling.models import Process
-import json
+from controlling.models import Process, Recipe
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
 
+@csrf_exempt
 def create_process(request):
-    print('oioioioioioi')
+    recipe_id = request.POST.get('recipe_id')
     process = Process()
-    process.recipe_id = request.POST.get('recipe_id')
-    process.state = 1
+    process.recipe = Recipe.objects.get(pk=recipe_id)
     process.save()
-    data = json.dumps(process.__dict__)
-    return HttpResponse(data, content_type='application/json')
+    return HttpResponse('OK')

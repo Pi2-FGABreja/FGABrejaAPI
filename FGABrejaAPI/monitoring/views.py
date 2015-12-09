@@ -1,5 +1,6 @@
 from django.views.generic import View
 from django.http import HttpResponse
+from controlling.comunication import Comunication
 from .models import Sensor
 from django.core import serializers
 import json
@@ -25,12 +26,9 @@ def get_thermal_sensors(request):
 
 
 def get_average_temperature(request):
-    sensors = Sensor.read.thermal()
-    average = 0
-    for sensor in sensors:
-        average += sensor.value
-    average = average / sensors.count()
-    data = {'average': round(average, 2),
+    comunication = Comunication()
+    average = comunication.read_thermal_sensor()
+    data = {'average': float(average),
             'sensor_type': 'thermal'}
     return HttpResponse(json.dumps(data),
                         content_type='application/json')
