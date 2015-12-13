@@ -21,5 +21,7 @@ urlpatterns = [
     url(r'^api/sensors/level/$', get_level_sensors, name='level'),
     url(r'^api/sensors/ldr/$', get_ldr_sensors, name='ldr'),
     url(r'^api/', include(controlling_api.urls)),
-    url(r'^api/controlling/create/process/$', views.create_process)
+    url(r'^api/controlling/create/process/$', views.create_process),
+    url(r'^api/insert/malt/$', views.insert_malt),
+    url(r'^api/iodine/test/$', views.iodine_test)
 ]

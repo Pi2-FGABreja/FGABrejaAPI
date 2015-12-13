@@ -20,3 +20,4 @@ class ProcessResource(ModelResource):
         allowed_methods = ['get', 'post']
         filtering = {'is_active': ALL}
         authorization = Authorization()
+        ordering = ['initial_datetime']

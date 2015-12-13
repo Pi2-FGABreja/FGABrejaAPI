@@ -77,6 +77,10 @@ class Process(models.Model):
     boiling_stop_time = models.DateTimeField(null=True)
     filtering_init = models.DateTimeField(null=True)
 
+    @classmethod
+    def current(cls):
+        return cls.objects.get(is_active=True)
+
     def change_heat(self):
         now = timezone.now()
         delta = now - self.actual_heat_time

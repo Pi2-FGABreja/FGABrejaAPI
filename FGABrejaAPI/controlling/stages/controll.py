@@ -12,7 +12,7 @@ class StageControll(object):
     @classmethod
     def handle_states(cls):
         try:
-            process = Process.objects.get(is_active=True)
+            process = Process.current()
         except ObjectDoesNotExist:
             logger.info("[StageControll] Any process started.")
             return
