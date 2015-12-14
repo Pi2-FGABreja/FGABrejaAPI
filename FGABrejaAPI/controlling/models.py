@@ -66,6 +66,7 @@ class Process(models.Model):
     malt = models.BooleanField(default=False)
     state = models.IntegerField(default=1)
     is_active = models.BooleanField(default=True)
+    last_temperature = models.FloatField(default=0)
 
     actual_heat = models.ForeignKey('Heat', null=True)
     actual_heat_time = models.DateTimeField(null=True)
@@ -76,6 +77,10 @@ class Process(models.Model):
 
     boiling_stop_time = models.DateTimeField(null=True)
     filtering_init = models.DateTimeField(null=True)
+
+    @classmethod
+    def current(cls):
+        return cls.objects.get(is_active=True)
 
     def change_heat(self):
         now = timezone.now()

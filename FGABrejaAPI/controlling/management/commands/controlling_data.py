@@ -24,7 +24,7 @@ class Command(BaseCommand):
         heats = [heat1, heat2, heat3]
 
         recipe = Recipe()
-        recipe.name = "Red Ale",
+        recipe.name = "Red Ale"
         recipe.description = "5.84% teor de álcool"
         recipe.malt = "75% Pilsen, 10% Malte de trigo, 10% CaraAmber, "
         "5% CaraAroma"

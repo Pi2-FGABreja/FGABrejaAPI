@@ -1,4 +1,5 @@
 from controlling.comunication import Comunication
+from controlling.models import Process
 from django.db import models
 from distutils.util import strtobool
 
@@ -44,6 +45,9 @@ class Sensor(models.Model):
     def read_sensor(self):
         if self.sensor_type == "thermal":
             self.value = self.serial_comunication.read_thermal_sensor()
+            process = Process.current()
+            process.last_temperature = self.value
+            process.save()
         if self.sensor_type == "level":
             self.value = self.serial_comunication.get_pot_level()
         self.save()

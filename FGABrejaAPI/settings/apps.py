@@ -22,6 +22,7 @@ DJANGO_APPS = (
 
 DJANGO_PLUGINS = (
     'djcelery',
+    'tastypie',
 )
 
 FGABREJA_APPS = (
