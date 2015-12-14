@@ -1,6 +1,5 @@
 from datetime import timedelta
 import json
-
 from django.db import models
 from django.utils import timezone
 
@@ -59,7 +58,7 @@ class Recipe(models.Model):
 
 
 class Process(models.Model):
-    initial_datetime = models.DateTimeField(auto_now=True)
+    initial_datetime = models.DateTimeField(auto_now_add=True)
     final_datetime = models.DateTimeField(null=True)
     recipe = models.ForeignKey('Recipe')
     iodine_test = models.BooleanField(default=False)
@@ -80,7 +79,10 @@ class Process(models.Model):
 
     @classmethod
     def current(cls):
-        return cls.objects.get(is_active=True)
+        try:
+            return cls.objects.get(is_active=True)
+        except:
+            return None
 
     def change_heat(self):
         now = timezone.now()

@@ -1,11 +1,13 @@
 from django.core.management.base import BaseCommand
-from controlling.models import Hop, Heat, Recipe
+from controlling.models import Hop, Heat, Recipe, Valve
 
 
 class Command(BaseCommand):
     help = "Create initial controlling data"
 
     def handle(self, *args, **options):
+        Valve.objects.create()
+
         print("Creating Red Ale recipe...")
         print("- Adding hops")
         hop1 = Hop.objects.create(minutes=60, weight=0.20)
@@ -57,11 +59,11 @@ class Command(BaseCommand):
         heats = [heat1, heat2, heat3]
 
         recipe = Recipe()
-        recipe.name = "Test",
+        recipe.name = "Test"
         recipe.description = "5.84% teor de álcool"
         recipe.malt = "75% Pilsen, 10% Malte de trigo, 10% CaraAmber, "
         "5% CaraAroma"
-        recipe.water_level = 20
+        recipe.water_level = 4
         recipe.initial_boiling_temperature = 65.0
         recipe.boiling_temperature = 90.0
         recipe.boiling_duration = 6

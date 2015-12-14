@@ -10,8 +10,10 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def create_process(request):
     actual_process = Process.current()
-    actual_process.is_active = False
-    actual_process.save()
+    if actual_process is not None:
+        actual_process.is_active = False
+        actual_process.save()
+
     recipe_id = request.POST.get('recipe_id')
     process = Process()
     process.recipe = Recipe.objects.get(pk=recipe_id)
