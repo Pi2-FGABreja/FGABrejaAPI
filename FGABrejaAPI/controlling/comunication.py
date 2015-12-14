@@ -84,7 +84,11 @@ class Comunication(object):
         time.sleep(2)
         temperature = self.comunication_serial.readline()
         temperature = temperature.splitlines()
-        return temperature[0]
+        temperature = temperature[0]
+        process = Process.current()
+        process.last_temperature = temperature
+        process.save()
+        return temperature
 
     def end_stage(self):
         self.comunication_serial.write("end".encode())
