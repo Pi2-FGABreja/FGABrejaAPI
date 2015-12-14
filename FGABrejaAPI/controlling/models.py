@@ -66,6 +66,7 @@ class Process(models.Model):
     malt = models.BooleanField(default=False)
     state = models.IntegerField(default=1)
     is_active = models.BooleanField(default=True)
+    last_temperature = models.FloatField(default=0)
 
     actual_heat = models.ForeignKey('Heat', null=True)
     actual_heat_time = models.DateTimeField(null=True)
